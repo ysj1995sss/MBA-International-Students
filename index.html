@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BYU MBA International Compass</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243358;
+    --navy-light: #2e4070;
+    --teal: #0e9f80;
+    --teal-light: #e0f5ef;
+    --teal-mid: #1bbf99;
+    --cream: #faf7f2;
+    --sand: #f0ebe0;
+    --sand-dark: #e2d9c8;
+    --amber: #d4891a;
+    --amber-light: #fdf3e3;
+    --red-soft: #e05252;
+    --red-light: #fdeaea;
+    --text-primary: #1a2744;
+    --text-secondary: #5a6580;
+    --text-muted: #8d97ae;
+    --border: rgba(26,39,68,0.1);
+    --border-strong: rgba(26,39,68,0.18);
+    --white: #ffffff;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 20px rgba(26,39,68,0.08);
+    --shadow-lg: 0 8px 40px rgba(26,39,68,0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* LAYOUT */
+  .app { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    padding: 0;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .logo-compass {
+    width: 32px; height: 32px;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-logo h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: #fff;
+    line-height: 1.3;
+    font-weight: 400;
+  }
+
+  .sidebar-logo span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .sidebar-student {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .student-badge {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .student-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-mid), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0;
+  }
+
+  .student-info p { font-size: 13px; color: #fff; font-weight: 500; }
+  .student-info span { font-size: 11px; color: rgba(255,255,255,0.45); }
+
+  .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 12px 24px 6px;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 0;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+    border-left: 2px solid transparent;
+    margin: 1px 0;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+  .nav-item.active {
+    background: rgba(14,159,128,0.18);
+    color: #fff;
+    border-left-color: var(--teal-mid);
+    font-weight: 500;
+  }
+
+  .nav-icon {
+    width: 18px; height: 18px; flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .nav-item.active .nav-icon { opacity: 1; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--teal);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .week-indicator {
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+
+  .week-indicator .wi-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 6px;
+  }
+
+  .week-indicator .wi-val {
+    font-size: 20px;
+    font-family: 'DM Serif Display', serif;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .week-indicator .wi-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--teal-mid);
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* MAIN CONTENT */
+  .main { margin-left: 240px; flex: 1; min-height: 100vh; }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--navy);
+  }
+
+  .topbar-left p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .topbar-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--teal-light);
+    color: var(--teal);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .topbar-chip .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .icon-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    position: relative;
+    transition: background 0.15s;
+  }
+
+  .icon-btn:hover { background: var(--sand); }
+
+  .notif-dot {
+    position: absolute;
+    top: 7px; right: 7px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--red-soft);
+    border: 1.5px solid white;
+  }
+
+  /* ============ ONBOARDING MODAL ============ */
+  .onboarding-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; transition: opacity 0.4s ease, visibility 0.4s;
+  }
+  
+  .onboarding-overlay.hidden {
+    opacity: 0; visibility: hidden; pointer-events: none;
+  }
+
+  .onboarding-modal {
+    background: var(--white); border-radius: 24px; padding: 40px;
+    max-width: 460px; width: 100%; box-shadow: var(--shadow-lg);
+    transform: translateY(20px); opacity: 0; animation: slideUp 0.5s forwards 0.2s;
+  }
+  
+  @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+  
+  .onboarding-modal h2 { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--navy); text-align: center; margin-bottom: 8px; }
+  .onboarding-modal p { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: 28px; line-height: 1.5; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+  .onboarding-select { width: 100%; padding: 12px 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; color: var(--navy); background: var(--cream); outline: none; transition: border-color 0.2s; cursor: pointer; }
+  .onboarding-select:focus { border-color: var(--teal); }
+  
+  .btn-full { width: 100%; justify-content: center; padding: 14px; font-size: 15px; margin-top: 10px; }
+
+  /* PAGES */
+  .page { display: none; padding: 36px 40px; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ PAGE 0: DASHBOARD ============ */
+  .dash-hero {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 40px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+  }
+
+  .dash-hero-text h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .dash-hero-text p {
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  .dash-hero-text p span {
+    color: var(--teal-mid);
+    font-weight: 600;
+  }
+
+  .circular-chart {
+    display: block;
+    margin: 0 auto;
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: var(--sand);
+    stroke-width: 2.5;
+  }
+
+  .circle {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.8s ease-out;
+  }
+  .circle.active { stroke: var(--teal-mid); }
+
+  .percentage {
+    fill: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 9px;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+  }
+
+  .dash-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .task-list {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: var(--sand); }
+
+  .task-checkbox {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border-strong);
+    border-radius: 6px;
+    margin-right: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .task-item.done .task-checkbox {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+
+  .task-checkbox svg {
+    width: 14px; height: 14px;
+    stroke: white; stroke-width: 3;
+    opacity: 0; transform: scale(0.5);
+    transition: all 0.2s;
+  }
+
+  .task-item.done .task-checkbox svg { opacity: 1; transform: scale(1); }
+
+  .task-title {
+    flex: 1;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--navy);
+    transition: color 0.2s;
+  }
+
+  .task-item.done .task-title {
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  .task-urgent {
+    background: var(--red-light);
+    color: var(--red-soft);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .live-session-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+    border-radius: var(--radius);
+    padding: 24px 32px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .live-session-card::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -40px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    border: 30px solid rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+
+  .ls-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .live-session-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; font-weight: 400; margin-bottom: 8px;
+  }
+  .live-session-card p {
+    font-size: 13.5px; color: rgba(255,255,255,0.7); margin-bottom: 20px; max-width: 340px; line-height: 1.5;
+  }
+
+  .btn-white {
+    background: white;
+    color: var(--navy);
+    border: none; border-radius: var(--radius-sm);
+    padding: 10px 20px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .btn-white:hover { background: var(--sand); }
+
+  .widget-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .widget-card h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .mentor-widget { display: flex; align-items: center; margin-bottom: 16px; }
+  .mentor-widget .chat-avatar { width: 48px; height: 48px; margin-right: 14px; font-size: 20px; }
+  .mentor-widget h5 { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .mentor-widget p { font-size: 12px; color: var(--text-secondary); }
+
+  .mentor-quote {
+    font-size: 13px; font-style: italic; color: var(--text-secondary);
+    background: var(--cream); padding: 12px; border-radius: var(--radius-sm);
+    margin-bottom: 16px; border-left: 3px solid var(--teal-mid);
+  }
+
+  .btn-outline {
+    width: 100%; padding: 10px; border: 1px solid var(--teal-mid); border-radius: var(--radius-sm);
+    background: transparent; color: var(--teal-mid); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .btn-outline:hover { background: var(--teal-light); }
+
+  .faq-link {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    margin-bottom: 10px; cursor: pointer; transition: all 0.15s;
+    font-size: 13px; color: var(--navy); font-weight: 500;
+  }
+  .faq-link:hover { border-color: var(--teal-mid); background: var(--teal-light); }
+
+  /* ============ PAGE 1: ARRIVAL HANDOFF ============ */
+  .arrival-hero {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 48px 52px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .arrival-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    border: 60px solid rgba(14,159,128,0.12);
+    pointer-events: none;
+  }
+
+  .arrival-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: 80px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 40px solid rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+
+  .arrival-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(14,159,128,0.2);
+    color: var(--teal-mid);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-bottom: 18px;
+  }
+
+  .arrival-hero h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    font-weight: 400;
+    max-width: 480px;
+  }
+
+  .arrival-hero h2 em {
+    color: var(--teal-mid);
+    font-style: italic;
+  }
+
+  .arrival-hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    max-width: 420px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  .arrival-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+
+  .btn-primary:hover { background: #0b8a6e; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+
+  .btn-ghost:hover { background: rgba(255,255,255,0.12); }
+
+  .arrival-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+
+  .arrival-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: box-shadow 0.2s;
+  }
+
+  .arrival-card:hover { box-shadow: var(--shadow); }
+
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+
+  .card-icon.teal { background: var(--teal-light); }
+  .card-icon.amber { background: var(--amber-light); }
+  .card-icon.navy { background: #eef0f5; }
+
+  .arrival-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .arrival-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .card-link {
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+
+  .peer-video-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .video-thumb {
+    width: 120px; height: 80px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1a2744, #2e4070);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .video-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(14,159,128,0.3), transparent);
+  }
+
+  .play-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+  }
+
+  .play-btn::after {
+    content: '';
+    border-left: 12px solid var(--navy);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    margin-left: 3px;
+  }
+
+  .video-info { flex: 1; }
+  .video-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .video-info h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+
+  .video-info p { font-size: 13px; color: var(--text-secondary); }
+
+  /* ============ PAGE 2: EMOTIONAL PULSE ============ */
+  .pulse-hero {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+    text-align: center;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pulse-week-badge {
+    display: inline-block;
+    background: var(--sand);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+
+  .pulse-hero h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .pulse-hero p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .scale-wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .scale-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    background: var(--white);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .scale-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-light);
+    transform: scale(1.08);
+  }
+
+  .scale-btn.selected {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(14,159,128,0.35);
+  }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    max-width: 340px;
+    margin: 0 auto 24px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .pulse-response {
+    display: none;
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: var(--radius-sm);
+    text-align: left;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .pulse-response.show { display: block; }
+  .pulse-response.positive { background: var(--teal-light); }
+  .pulse-response.warning { background: var(--amber-light); }
+  .pulse-response.concern { background: var(--red-light); }
+
+  .pulse-response h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .pulse-response.positive h4 { color: #0b7a5e; }
+  .pulse-response.warning h4 { color: var(--amber); }
+  .pulse-response.concern h4 { color: var(--red-soft); }
+  .pulse-response p { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
+
+  .pulse-cta {
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
+    border: none; background: none; font-family: 'DM Sans', sans-serif; padding: 0;
+  }
+
+  .pulse-response.positive .pulse-cta { color: var(--teal); }
+  .pulse-response.warning .pulse-cta { color: var(--amber); }
+  .pulse-response.concern .pulse-cta { color: var(--red-soft); }
+
+  .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 640px; margin: 0 auto; }
+
+  .history-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+
+  .history-card .hc-week { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+  .history-card .hc-score { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--navy); margin-bottom: 2px; }
+  .history-card .hc-label { font-size: 12px; color: var(--text-secondary); }
+
+  .sparkline {
+    display: flex; align-items: flex-end; gap: 4px;
+    height: 32px; margin-top: 12px;
+  }
+
+  .spark-bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    background: var(--teal-light);
+    transition: background 0.2s;
+  }
+
+  .spark-bar.active { background: var(--teal); }
+
+  /* ============ PAGE 3: ESCALATION PATH ============ */
+  .chat-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+
+  .chat-main {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    height: 560px;
+  }
+
+  .chat-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .chat-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #0e9f80, #0b7a5e);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  .chat-header-info h4 { font-size: 14px; font-weight: 500; color: var(--navy); }
+  .chat-header-info span { font-size: 12px; color: var(--teal); }
+
+  .escalate-btn-header {
+    margin-left: auto;
+    background: var(--sand);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--navy);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 6px;
+    transition: background 0.15s;
+  }
+
+  .escalate-btn-header:hover { background: var(--sand-dark); }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .msg {
+    max-width: 80%;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .msg.bot { align-self: flex-start; }
+  .msg.user { align-self: flex-end; }
+
+  .msg-bubble {
+    padding: 11px 15px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .msg.bot .msg-bubble {
+    background: var(--sand);
+    color: var(--navy);
+    border-radius: 4px 16px 16px 16px;
+  }
+
+  .msg.user .msg-bubble {
+    background: var(--navy);
+    color: rgba(255,255,255,0.92);
+    border-radius: 16px 4px 16px 16px;
+  }
+
+  .msg-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; padding: 0 4px; }
+  .msg.user .msg-meta { text-align: right; }
+
+  .escalation-notice {
+    background: var(--amber-light);
+    border: 1px solid rgba(212,137,26,0.25);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin: 0 20px 12px;
+    font-size: 13px;
+    color: var(--amber);
+    display: none;
+  }
+
+  .escalation-notice.show { display: block; }
+  .escalation-notice strong { display: block; font-weight: 600; margin-bottom: 3px; }
+
+  .chat-input-row {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    background: var(--cream);
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    min-height: 40px;
+    max-height: 100px;
+  }
+
+  .chat-input:focus { border-color: var(--teal); }
+
+  .send-btn {
+    width: 38px; height: 38px; flex-shrink: 0;
+    background: var(--navy);
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .send-btn:hover { background: var(--navy-light); }
+
+  .escalation-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .escalation-tier {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: box-shadow 0.2s;
+  }
+
+  .escalation-tier:hover { box-shadow: var(--shadow); }
+
+  .tier-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .tier-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tier-num.t1 { background: var(--teal-light); color: var(--teal); }
+  .tier-num.t2 { background: var(--amber-light); color: var(--amber); }
+  .tier-num.t3 { background: var(--red-light); color: var(--red-soft); }
+
+  .tier-label { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .tier-sub { font-size: 11px; color: var(--text-muted); }
+  .tier-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px; }
+
+  .tier-btn {
+    width: 100%;
+    padding: 9px 0;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    border: 1px solid;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  .tier-btn.t1 { background: var(--teal-light); color: var(--teal); border-color: rgba(14,159,128,0.3); }
+  .tier-btn.t1:hover { background: var(--teal); color: #fff; }
+  .tier-btn.t2 { background: var(--amber-light); color: var(--amber); border-color: rgba(212,137,26,0.3); }
+  .tier-btn.t2:hover { background: var(--amber); color: #fff; }
+  .tier-btn.t3 { background: var(--red-light); color: var(--red-soft); border-color: rgba(224,82,82,0.3); }
+  .tier-btn.t3:hover { background: var(--red-soft); color: #fff; }
+
+  /* ============ PAGE 4: POST-MORTEM ============ */
+  .postmortem-layout { max-width: 680px; margin: 0 auto; }
+
+  .pm-hero {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pm-hero::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    border: 50px solid rgba(14,159,128,0.1);
+    pointer-events: none;
+  }
+
+  .pm-hero .grad-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(14,159,128,0.2);
+    color: var(--teal-mid);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .pm-hero h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: #fff;
+    font-weight: 400;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+
+  .pm-hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  .pm-steps { display: flex; gap: 6px; margin-bottom: 24px; }
+
+  .pm-step-dot {
+    flex: 1;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .pm-step-dot.done { background: var(--teal); }
+  .pm-step-dot.active { background: var(--teal-mid); }
+
+  .pm-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .pm-step-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .pm-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 8px;
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+  }
+
+  .pm-card > p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+
+  .pm-question { margin-bottom: 20px; }
+
+  .pm-question label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .pm-question label span {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-left: 4px;
+  }
+
+  .pm-textarea {
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13.5px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    background: var(--cream);
+    resize: vertical;
+    outline: none;
+    min-height: 80px;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+  }
+
+  .pm-textarea:focus { border-color: var(--teal); }
+
+  .pm-select {
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    background: var(--cream);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    transition: border-color 0.15s;
+  }
+
+  .pm-select:focus { border-color: var(--teal); }
+
+  .rating-row { display: flex; gap: 8px; }
+
+  .rating-chip {
+    flex: 1;
+    padding: 10px 0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--white);
+  }
+
+  .rating-chip:hover { border-color: var(--teal); color: var(--teal); }
+  .rating-chip.selected { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 500; }
+
+  .pm-nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    margin-top: 8px;
+  }
+
+  .btn-nav-back {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 10px 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+
+  .btn-nav-back:hover { background: var(--sand); }
+
+  .btn-nav-next {
+    background: var(--navy);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 28px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+    display: flex; align-items: center; gap: 7px;
+  }
+
+  .btn-nav-next:hover { background: var(--navy-light); }
+
+  .pm-success {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .pm-success.show { display: block; }
+
+  .pm-success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    font-size: 28px;
+  }
+
+  .pm-success h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .pm-success p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  /* INSIGHTS FEED */
+  .insights-section { margin-top: 20px; }
+  .insights-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .insight-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  .insight-vote {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .vote-btn {
+    border: none; background: none; cursor: pointer;
+    color: var(--text-muted); font-size: 13px; padding: 2px 4px;
+    transition: color 0.15s;
+  }
+
+  .vote-btn:hover { color: var(--teal); }
+
+  .vote-count { font-size: 12px; font-weight: 600; color: var(--navy); }
+
+  .insight-body { flex: 1; }
+  .insight-body p { font-size: 13px; color: var(--navy); line-height: 1.5; margin-bottom: 6px; }
+  .insight-meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; }
+  .insight-tag { background: var(--sand); border-radius: 999px; padding: 2px 9px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(26,39,68,0.5);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 440px;
+    width: 90%;
+    transform: scale(0.95);
+    transition: transform 0.2s;
+  }
+
+  .modal-overlay.show .modal { transform: scale(1); }
+
+  .modal h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .modal p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+
+  .modal-actions { display: flex; gap: 10px; }
+
+  .btn-modal-cancel {
+    flex: 1; padding: 11px 0; border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm); background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+    color: var(--text-secondary); cursor: pointer; transition: background 0.15s;
+  }
+
+  .btn-modal-cancel:hover { background: var(--sand); }
+
+  .btn-modal-confirm {
+    flex: 1; padding: 11px 0; border: none;
+    border-radius: var(--radius-sm); background: var(--navy);
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+    color: #fff; font-weight: 500; cursor: pointer; transition: background 0.15s;
+  }
+
+  .btn-modal-confirm:hover { background: var(--navy-light); }
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING OVERLAY -->
+<div id="onboarding-overlay" class="onboarding-overlay">
+  <div class="onboarding-modal">
+    <h2>Welcome to BYU MBA</h2>
+    <p>Let's build your custom pre-arrival timeline. No guessing, just clear steps tailored to your needs.</p>
+    <form onsubmit="submitOnboarding(event)">
+      <div class="form-group">
+        <label>Country of Origin</label>
+        <select class="onboarding-select" required>
+          <option value="">Select a country...</option>
+          <option>India</option>
+          <option>Brazil</option>
+          <option>China</option>
+          <option>Canada</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Family Status</label>
+        <select class="onboarding-select" required>
+          <option value="">Select status...</option>
+          <option>Single</option>
+          <option>Married (Spouse accompanying)</option>
+          <option>Married with Children</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Target Industry</label>
+        <select class="onboarding-select" required>
+          <option value="">Select industry...</option>
+          <option>Technology / Product</option>
+          <option>Finance / IB</option>
+          <option>Consulting</option>
+          <option>Marketing</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary btn-full">Generate My Timeline ›</button>
+    </form>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg class="logo-compass" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <circle cx="16" cy="16" r="8" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <polygon points="16,4 18.5,14 16,12 13.5,14" fill="#0e9f80"/>
+        <polygon points="16,28 13.5,18 16,20 18.5,18" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="16" cy="16" r="2" fill="white"/>
+      </svg>
+      <h2>International<br>Compass</h2>
+      <span>BYU MBA Program</span>
+    </div>
+
+    <div class="sidebar-student">
+      <div class="student-badge">
+        <div class="student-avatar">AK</div>
+        <div class="student-info">
+          <p>Arjun Kumar</p>
+          <span>India · Class of 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">My Journey</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <svg class="nav-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="11" y="1" width="6" height="6" rx="1.5"/>
+          <rect x="1" y="11" width="6" height="6" rx="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5"/>
+        </svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('arrival')">
+        <svg class="nav-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 1L9 13M9 13L5 9M9 13L13 9"/><path d="M2 16H16"/>
+        </svg>
+        Arrival Day
+        <span class="nav-badge">New</span>
+      </div>
+      <div class="nav-item" onclick="showPage('pulse')">
+        <svg class="nav-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 9H4L6 4L9 14L11 7L13 11H17"/>
+        </svg>
+        Weekly Pulse
+      </div>
+
+      <div class="nav-section-label">Support</div>
+      <div class="nav-item" onclick="showPage('kb')">
+        <svg class="nav-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 3h14v12H2z"/><path d="M6 3v12"/><path d="M10 7h4"/><path d="M10 11h4"/>
+        </svg>
+        Knowledge Base
+      </div>
+      <div class="nav-item" onclick="showPage('escalation')">
+        <svg class="nav-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 1a8 8 0 100 16A8 8 0 009 1z"/><path d="M9 8v4"/><circle cx="9" cy="6" r="0.5" fill="currentColor"/>
+        </svg>
+        Get Help
+      </div>
+      <div class="nav-item" onclick="showPage('postmortem')">
+        <svg class="nav-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H4a1 1 0 00-1 1v12a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1z"/>
+          <path d="M6 6h6M6 9h6M6 12h4"/>
+        </svg>
+        Share Your Story
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="week-indicator">
+        <div class="wi-label">Weeks to arrival</div>
+        <div class="wi-val">8</div>
+        <div class="wi-sub">Aug 18, 2025 · Provo, UT</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 25%"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-sub">Your personalized pre-arrival roadmap</p>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-chip">
+          <div class="dot"></div>
+          <span id="topbar-status">25% on track this week</span>
+        </div>
+        <button class="icon-btn" onclick="openModal()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M8 1a7 7 0 100 14A7 7 0 008 1z"/>
+            <path d="M8 7v4"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor"/>
+          </svg>
+          <span class="notif-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ PAGE 0: DASHBOARD ============ -->
+    <div class="page active" id="page-dashboard">
+      
+      <!-- Dash Hero with Dynamic Progress -->
+      <div class="dash-hero">
+        <div class="dash-hero-text">
+          <h2>Welcome! You are doing great.</h2>
+          <p>You are <span id="dash-progress-text">25% on track</span> for Week 1.</p>
+        </div>
+        
+        <svg viewBox="0 0 36 36" class="circular-chart">
+          <path class="circle-bg"
+            d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+          <path class="circle active" id="dash-progress-circle"
+            stroke-dasharray="25, 100"
+            d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+          <text x="18" y="20.35" class="percentage" id="dash-percentage-num">25%</text>
+        </svg>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Left Column: Tasks & Live Sessions -->
+        <div>
+          <h3 class="dash-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal-mid)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Week 1 Priorities
+          </h3>
+          
+          <div class="task-list" id="dashboard-tasks">
+            <!-- Rendered by JS -->
+          </div>
+
+          <h3 class="dash-section-title" style="margin-top: 32px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal-mid)" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+            Upcoming Live Session
+          </h3>
+
+          <div class="live-session-card">
+            <div class="ls-tag">This Thursday, 9:00 AM (MDT)</div>
+            <h3>Demystifying the DS-160 & Visa Interviews</h3>
+            <p>Join the ISSS office and current students for a step-by-step walkthrough of the visa process. Bring your questions!</p>
+            <button class="btn-white">Add to Calendar</button>
+          </div>
+        </div>
+
+        <!-- Right Column: Support Widgets -->
+        <div>
+          <div class="widget-card">
+            <h4>Your Mentor</h4>
+            <div class="mentor-widget">
+              <div class="chat-avatar">🤝</div>
+              <div>
+                <h5>Ji-Young Kim</h5>
+                <p>2nd Year • South Korea</p>
+              </div>
+            </div>
+            <div class="mentor-quote">
+              "Hey! I know this part is stressful. Reach out anytime if you want to chat about housing or just MBA life."
+            </div>
+            <button class="btn-outline" onclick="showPage('escalation')">
+              Message Ji-Young
+            </button>
+          </div>
+
+          <div class="widget-card">
+            <h4>Quick Answers (24/7)</h4>
+            <div class="faq-link" onclick="showPage('kb')">
+              When is the deposit due? <span>›</span>
+            </div>
+            <div class="faq-link" onclick="showPage('kb')">
+              Do I need a car in Provo? <span>›</span>
+            </div>
+            <div class="faq-link" onclick="showPage('kb')">
+              How long does I-20 take? <span>›</span>
+            </div>
+            <button class="btn-outline" style="border:none; background:var(--sand); color:var(--navy); margin-top:8px;" onclick="showPage('kb')">
+              Search Knowledge Base
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ PAGE 1: ARRIVAL HANDOFF ============ -->
+    <div class="page" id="page-arrival">
+      <div class="arrival-hero">
+        <div class="arrival-tag">
+          <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
+          Arrival Day · August 18, 2025
+        </div>
+        <h2>You made it,<br><em>Arjun.</em></h2>
+        <p>Every task, every form, every sleepless night of planning led here. The Compass doesn't go dark today — it transforms. Welcome to Provo.</p>
+        <div class="arrival-actions">
+          <button class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg>
+            View Day One Plan
+          </button>
+          <button class="btn-ghost">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M5 7l2 2 3-3"/></svg>
+            Mark as Arrived
+          </button>
+        </div>
+      </div>
+
+      <!-- PEER VIDEO -->
+      <div class="peer-video-card" style="margin-bottom: 24px;">
+        <div class="video-thumb">
+          <div class="play-btn"></div>
+        </div>
+        <div class="video-info">
+          <div class="video-label">From a peer who was here</div>
+          <h4>"Three things I wish someone told me on arrival day"</h4>
+          <p>Ji-Young Kim · South Korea · MBA Class of 2024 · 4 min</p>
+        </div>
+        <button class="btn-primary" style="margin-left: auto; flex-shrink: 0;">Watch ›</button>
+      </div>
+
+      <!-- THREE CARDS -->
+      <div class="arrival-grid">
+        <div class="arrival-card">
+          <div class="card-icon teal">📍</div>
+          <h4>Where to go first</h4>
+          <p>Check in at the Tanner Building, Room 108 between 9 AM and 12 PM. Bring your passport and I-20. ISSS staff will be there.</p>
+          <a class="card-link" href="#">Get directions ›</a>
+        </div>
+        <div class="arrival-card">
+          <div class="card-icon amber">🤝</div>
+          <h4>Meet your mentor</h4>
+          <p>Ji-Young Kim is waiting for you. You have a welcome lunch scheduled at noon at the Cougareat — she'll find you.</p>
+          <a class="card-link" href="#">View contact ›</a>
+        </div>
+        <div class="arrival-card">
+          <div class="card-icon navy">📋</div>
+          <h4>Today's only tasks</h4>
+          <p>Just three things matter today: ISSS check-in, get your BYU ID card, and attend the 3 PM international welcome session.</p>
+          <a class="card-link" href="#">Open list ›</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PAGE 2: EMOTIONAL PULSE ============ -->
+    <div class="page" id="page-pulse">
+      <div class="pulse-hero">
+        <div class="pulse-week-badge">Week 4 · July 14, 2025</div>
+        <h2>How prepared do you feel<br>heading into this week?</h2>
+        <p>This takes 10 seconds. Your answer helps your mentor and the program office know how to support you — no judgment, just signal.</p>
+
+        <div class="scale-wrapper" id="scale-wrapper">
+          <button class="scale-btn" onclick="selectRating(1)">1</button>
+          <button class="scale-btn" onclick="selectRating(2)">2</button>
+          <button class="scale-btn" onclick="selectRating(3)">3</button>
+          <button class="scale-btn" onclick="selectRating(4)">4</button>
+          <button class="scale-btn" onclick="selectRating(5)">5</button>
+        </div>
+        <div class="scale-labels">
+          <span>Really struggling</span>
+          <span>Feeling confident</span>
+        </div>
+
+        <div class="pulse-response positive" id="pulse-positive">
+          <h4>That's great to hear.</h4>
+          <p>You're on track. Your mentor Ji-Young will check in on Friday as usual. Keep the momentum going — week 5 is all about housing logistics.</p>
+          <button class="pulse-cta">See what's next for you ›</button>
+        </div>
+
+        <div class="pulse-response warning" id="pulse-warning">
+          <h4>Got it. Let's make sure you're not carrying this alone.</h4>
+          <p>A few students feel the same way at week 4 — it's usually the visa timeline that causes stress here. Your mentor Ji-Young can help you sort through it.</p>
+          <button class="pulse-cta" onclick="showPage('escalation')">Message your mentor ›</button>
+        </div>
+
+        <div class="pulse-response concern" id="pulse-concern">
+          <h4>Thank you for being honest. That matters.</h4>
+          <p>You shouldn't have to figure this out alone. Ji-Young knows what this week feels like — she wants to hear from you today. You can also reach the program office directly.</p>
+          <button class="pulse-cta" onclick="showPage('escalation')">Connect with support now ›</button>
+        </div>
+      </div>
+
+      <div class="history-grid">
+        <div class="history-card">
+          <div class="hc-week">Past 4 weeks</div>
+          <div class="hc-score">3.5</div>
+          <div class="hc-label">Average confidence score</div>
+          <div class="sparkline">
+            <div class="spark-bar" style="height: 45%"></div>
+            <div class="spark-bar" style="height: 60%"></div>
+            <div class="spark-bar" style="height: 55%"></div>
+            <div class="spark-bar active" style="height: 70%"></div>
+          </div>
+        </div>
+        <div class="history-card">
+          <div class="hc-week">Cohort average this week</div>
+          <div class="hc-score">3.8</div>
+          <div class="hc-label">You're right there with your peers</div>
+          <div class="sparkline">
+            <div class="spark-bar" style="height: 55%"></div>
+            <div class="spark-bar" style="height: 65%"></div>
+            <div class="spark-bar" style="height: 70%"></div>
+            <div class="spark-bar active" style="height: 75%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ============ PAGE 3: KNOWLEDGE BASE ============ -->
+    <div class="page" id="page-kb">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto 40px;">
+        <h2 style="font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--navy); margin-bottom: 12px;">24/7 Answer Hub</h2>
+        <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 24px;">Search our official database for immediate answers to common questions. No need to wait for office hours.</p>
+        
+        <div style="position: relative;">
+          <input type="text" placeholder="e.g., 'How long does the I-20 take to process?'" style="width: 100%; padding: 16px 20px 16px 52px; font-size: 15px; border: 1px solid var(--border-strong); border-radius: var(--radius); box-shadow: var(--shadow); outline: none; font-family: 'DM Sans', sans-serif;">
+          <svg style="position: absolute; left: 20px; top: 16px; width: 20px; height: 20px; color: var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: 0 auto;">
+        <div class="widget-card" style="margin-bottom: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size: 26px; margin-bottom: 14px; color: var(--teal);">🛂</div>
+          <h3 style="font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 6px;">Visas & Immigration</h3>
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">I-20 forms, DS-160, F-1 interview prep, and dependent visas.</p>
+        </div>
+        
+        <div class="widget-card" style="margin-bottom: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size: 26px; margin-bottom: 14px; color: var(--teal);">🏠</div>
+          <h3 style="font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 6px;">Housing in Provo</h3>
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">On-campus family housing vs. off-campus complexes, leases, and transport.</p>
+        </div>
+        
+        <div class="widget-card" style="margin-bottom: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size: 26px; margin-bottom: 14px; color: var(--teal);">💼</div>
+          <h3 style="font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 6px;">Financial Prep</h3>
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">Paying the deposit, proof of funds, and setting up a US bank account.</p>
+        </div>
+
+        <div class="widget-card" style="margin-bottom: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size: 26px; margin-bottom: 14px; color: var(--teal);">📚</div>
+          <h3 style="font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 6px;">Academic Culture</h3>
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">What to expect in classes, grading, and participating in case studies.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PAGE 4: ESCALATION PATH ============ -->
+    <div class="page" id="page-escalation">
+      <div class="chat-layout">
+        <div class="chat-main">
+          <div class="chat-header">
+            <div class="chat-avatar">🧭</div>
+            <div class="chat-header-info">
+              <h4>Compass Assistant</h4>
+              <span>● Online · Instant answers from the knowledge base</span>
+            </div>
+            <button class="escalate-btn-header" onclick="triggerEscalation()">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 1a5.5 5.5 0 100 11A5.5 5.5 0 006.5 1z"/><path d="M6.5 5.5v3"/><circle cx="6.5" cy="4" r="0.5" fill="currentColor"/></svg>
+              Want a human?
+            </button>
+          </div>
+
+          <div class="chat-messages" id="chat-messages">
+            <div class="msg bot">
+              <div class="msg-bubble">Hi Arjun 👋 I'm your Compass assistant. I can answer questions about visas, housing, deadlines, recruiting, and anything else about the pre-arrival process. What's on your mind?</div>
+              <div class="msg-meta">Compass · 10:02 AM</div>
+            </div>
+            <div class="msg user">
+              <div class="msg-bubble">When exactly is my I-20 deposit due?</div>
+              <div class="msg-meta">You · 10:03 AM</div>
+            </div>
+            <div class="msg bot">
+              <div class="msg-bubble">Based on your admission date, your I-20 deposit deadline is <strong>June 30, 2025</strong>. Payment goes through the ISSS portal — you'll find the link in your admission email or on the ISSS section of the BYU website. Do you need help finding the portal?</div>
+              <div class="msg-meta">Compass · 10:03 AM</div>
+            </div>
+            <div class="msg user">
+              <div class="msg-bubble">My country has a complicated political situation right now and I'm worried about my visa being denied. This isn't in the FAQ.</div>
+              <div class="msg-meta">You · 10:08 AM</div>
+            </div>
+            <div class="msg bot">
+              <div class="msg-bubble">That's a really valid concern, and honestly this is one of those situations where you deserve a real person, not a bot. I don't want to give you generic advice on something this important. See the panel on the right — I'd recommend going straight to Tier 2 (your mentor) or Tier 3 (the program office) for this one.</div>
+              <div class="msg-meta">Compass · 10:08 AM</div>
+            </div>
+          </div>
+
+          <div class="escalation-notice" id="escalation-notice">
+            <strong>Connecting you with a human.</strong>
+            Ji-Young Kim (your mentor) has been notified and will respond within a few hours.
+          </div>
+
+          <div class="chat-input-row">
+            <textarea class="chat-input" id="chat-input" placeholder="Ask anything — no such thing as a stupid question." rows="1" onkeydown="handleChatKey(event)"></textarea>
+            <button class="send-btn" onclick="sendMessage()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><path d="M14 2L1 7l5 2 2 5 6-13z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ESCALATION PANEL -->
+        <div class="escalation-panel">
+          <div style="font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 4px;">Support tiers</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Start at Tier 1. Move up only if you need a human.</div>
+
+          <div class="escalation-tier">
+            <div class="tier-header">
+              <div class="tier-num t1">1</div>
+              <div>
+                <div class="tier-label">Compass Chatbot</div>
+                <div class="tier-sub">Instant · 24/7 · Knowledge Base</div>
+              </div>
+            </div>
+            <div class="tier-desc">Great for visa deadlines, housing logistics, document checklists, and FAQs. Available at 3 AM in Beijing just as well as 3 PM in Provo.</div>
+            <button class="tier-btn t1">You're here now ✓</button>
+          </div>
+
+          <div class="escalation-tier">
+            <div class="tier-header">
+              <div class="tier-num t2">2</div>
+              <div>
+                <div class="tier-label">Ji-Young Kim · Your Mentor</div>
+                <div class="tier-sub">Responds within 4 hrs · Peer · South Korea</div>
+              </div>
+            </div>
+            <div class="tier-desc">For nuanced questions, visa complications, emotional support, or anything where lived experience matters more than official answers.</div>
+            <button class="tier-btn t2" onclick="triggerEscalation()">Message Ji-Young ›</button>
+          </div>
+
+          <div class="escalation-tier">
+            <div class="tier-header">
+              <div class="tier-num t3">3</div>
+              <div>
+                <div class="tier-label">MBA Program Office</div>
+                <div class="tier-sub">Business hours · Official · Staff</div>
+              </div>
+            </div>
+            <div class="tier-desc">For official policy questions, documentation issues, urgent immigration concerns, or anything that requires an institutional decision.</div>
+            <button class="tier-btn t3">Open a staff ticket ›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PAGE 5: POST-MORTEM ============ -->
+    <div class="page" id="page-postmortem">
+      <div class="postmortem-layout">
+
+        <div class="pm-hero">
+          <div class="grad-tag">🎓 Graduating student · Class of 2025</div>
+          <h2>You've been through it.<br>Help the next cohort.</h2>
+          <p>This takes under 5 minutes. Your honest answers will be reviewed by staff and the best insights will be surfaced to next year's incoming students — with your name on them if you'd like.</p>
+        </div>
+
+        <div class="pm-steps" id="pm-steps">
+          <div class="pm-step-dot active" id="step-dot-0"></div>
+          <div class="pm-step-dot" id="step-dot-1"></div>
+          <div class="pm-step-dot" id="step-dot-2"></div>
+          <div class="pm-step-dot" id="step-dot-3"></div>
+        </div>
+
+        <div id="pm-form-wrap">
+          <!-- STEP 0 -->
+          <div class="pm-card" id="pm-step-0">
+            <div class="pm-step-label">Step 1 of 4</div>
+            <h3>The hardest part no one warned you about</h3>
+            <p>What was the single most confusing or stressful moment in your pre-arrival process? Be specific — vague answers don't help the next student.</p>
+            <div class="pm-question">
+              <label>What happened? <span>(be specific)</span></label>
+              <textarea class="pm-textarea" placeholder="e.g. I didn't know that the SEVIS fee had to be paid before I could schedule my visa appointment — I thought it was paid at the embassy..."></textarea>
+            </div>
+            <div class="pm-question">
+              <label>Which phase was this?</label>
+              <select class="pm-select">
+                <option value="">Select a phase</option>
+                <option>Visa & Documents (Weeks 1–4)</option>
+                <option>Housing (Weeks 3–6)</option>
+                <option>Program Preparation (Weeks 4–7)</option>
+                <option>Arrival & Orientation (Week 8+)</option>
+              </select>
+            </div>
+            <div class="pm-nav">
+              <div></div>
+              <button class="btn-nav-next" onclick="pmNext(0)">Next ›</button>
+            </div>
+          </div>
+
+          <!-- STEP 1 -->
+          <div class="pm-card" id="pm-step-1" style="display:none;">
+            <div class="pm-step-label">Step 2 of 4</div>
+            <h3>The one thing you'd put on Week 1's checklist</h3>
+            <p>If you could add one task to the very first week of the Compass — something that would have made everything easier — what would it be?</p>
+            <div class="pm-question">
+              <label>Your addition</label>
+              <textarea class="pm-textarea" placeholder="e.g. 'Research which banks offer accounts to international students before arriving — setting up banking took me 3 weeks and I couldn't pay rent...'"></textarea>
+            </div>
+            <div class="pm-question">
+              <label>How much would this have helped you?</label>
+              <div class="rating-row" id="pm-rating-1">
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-1')">A little</div>
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-1')">Somewhat</div>
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-1')">A lot</div>
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-1')">Enormously</div>
+              </div>
+            </div>
+            <div class="pm-nav">
+              <button class="btn-nav-back" onclick="pmBack(1)">‹ Back</button>
+              <button class="btn-nav-next" onclick="pmNext(1)">Next ›</button>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="pm-card" id="pm-step-2" style="display:none;">
+            <div class="pm-step-label">Step 3 of 4</div>
+            <h3>What made you feel most prepared?</h3>
+            <p>We want to keep what worked. What resource, moment, or person gave you the most confidence before you arrived?</p>
+            <div class="pm-question">
+              <label>What helped most?</label>
+              <textarea class="pm-textarea" placeholder="e.g. 'My mentor sent me a voice note walking me through her first week — it was 4 minutes and worth more than every official email combined...'"></textarea>
+            </div>
+            <div class="pm-question">
+              <label>What type of support was this?</label>
+              <div class="rating-row" id="pm-rating-2">
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-2')">Peer mentor</div>
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-2')">Compass platform</div>
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-2')">Program staff</div>
+                <div class="rating-chip" onclick="selectRatingChip(this, 'pm-rating-2')">Other students</div>
+              </div>
+            </div>
+            <div class="pm-nav">
+              <button class="btn-nav-back" onclick="pmBack(2)">‹ Back</button>
+              <button class="btn-nav-next" onclick="pmNext(2)">Next ›</button>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="pm-card" id="pm-step-3" style="display:none;">
+            <div class="pm-step-label">Step 4 of 4</div>
+            <h3>Your message to next year's Arjun</h3>
+            <p>Write a short note to the incoming international student who is exactly where you were a year ago. What do you wish someone had said to you?</p>
+            <div class="pm-question">
+              <label>Your message <span>(will be shown on the platform if selected)</span></label>
+              <textarea class="pm-textarea" style="min-height: 110px;" placeholder="e.g. 'You're not behind. Everyone feels behind. The fact that you're reading this means you're already doing better than I was at week 1. The first month is hard, and then it becomes yours...'"></textarea>
+            </div>
+            <div class="pm-question">
+              <label>Share with your name, or anonymously?</label>
+              <select class="pm-select">
+                <option>Share with my name and country</option>
+                <option>Share anonymously</option>
+                <option>Keep private (for staff only)</option>
+              </select>
+            </div>
+            <div class="pm-nav">
+              <button class="btn-nav-back" onclick="pmBack(3)">‹ Back</button>
+              <button class="btn-nav-next" onclick="pmSubmit()">Submit insights ›</button>
+            </div>
+          </div>
+
+          <!-- SUCCESS -->
+          <div class="pm-success" id="pm-success">
+            <div class="pm-success-icon">✓</div>
+            <h3>Thank you, truly.</h3>
+            <p>Your insights have been submitted. The program office will review them this week. If your message is selected for the platform, you'll receive a note from the team. You've just made the journey easier for someone who doesn't know your name yet.</p>
+          </div>
+        </div>
+
+        <!-- PAST INSIGHTS FEED -->
+        <div class="insights-section">
+          <div class="insights-label">Top insights from Class of 2024</div>
+
+          <div class="insight-card">
+            <div class="insight-vote">
+              <button class="vote-btn">▲</button>
+              <div class="vote-count">47</div>
+              <button class="vote-btn">▽</button>
+            </div>
+            <div class="insight-body">
+              <p>Open a US bank account digitally before you arrive. Chase and Bank of America both allow it. Waiting until you're in Provo cost me 3 weeks of payment delays.</p>
+              <div class="insight-meta">
+                <span>Ji-Young K. · South Korea · 2024</span>
+                <span class="insight-tag">Housing</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-vote">
+              <button class="vote-btn">▲</button>
+              <div class="vote-count">38</div>
+              <button class="vote-btn">▽</button>
+            </div>
+            <div class="insight-body">
+              <p>The SEVIS fee must be paid before you can book your visa appointment — not at the embassy. This confused almost everyone in my cohort and caused 2-week delays.</p>
+              <div class="insight-meta">
+                <span>Anonymous · Brazil · 2024</span>
+                <span class="insight-tag">Visa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-vote">
+              <button class="vote-btn">▲</button>
+              <div class="vote-count">29</div>
+              <button class="vote-btn">▽</button>
+            </div>
+            <div class="insight-body">
+              <p>You're not behind. I felt behind every single week until orientation. Then I looked around and realized everyone felt the same way. Ask your stupid questions — they're not stupid.</p>
+              <div class="insight-meta">
+                <span>Marco L. · Italy · 2024</span>
+                <span class="insight-tag">Confidence</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h3>Notifications</h3>
+    <p>You have one new message from <strong>Ji-Young Kim</strong> (your mentor): "Hey Arjun — checking in before week 4. How's the visa timeline looking? Let me know if you want to jump on a quick call this week."</p>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Dismiss</button>
+      <button class="btn-modal-confirm" onclick="closeModal(); showPage('escalation')">Reply via Compass</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Onboarding Logic
+  function submitOnboarding(e) {
+    e.preventDefault();
+    const overlay = document.getElementById('onboarding-overlay');
+    overlay.classList.add('hidden');
+    // We optionally update details on the page based on select boxes if needed
+    // Setting timeout to allow fade transition
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      renderTasks(); // Render after entering to simulate loading dashboard
+    }, 400);
+  }
+
+  // Page Meta configuration
+  const pageMeta = {
+    dashboard: { title: 'Dashboard', sub: 'Your personalized pre-arrival roadmap' },
+    arrival: { title: 'Arrival Day', sub: 'Your handoff from preparation to belonging' },
+    pulse: { title: 'Weekly Pulse', sub: 'How are you feeling this week, Arjun?' },
+    kb: { title: 'Knowledge Base', sub: '24/7 asynchronous answers' },
+    escalation: { title: 'Get Help', sub: 'Three tiers of support — always available, zero judgment' },
+    postmortem: { title: 'Share Your Story', sub: 'Help next year\'s incoming students by sharing what you learned' }
+  };
+
+  // Switch pages
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    
+    const meta = pageMeta[id] || {};
+    document.getElementById('page-title').textContent = meta.title || '';
+    document.getElementById('page-sub').textContent = meta.sub || '';
+    
+    const navMap = { dashboard: 0, arrival: 1, pulse: 2, kb: 3, escalation: 4, postmortem: 5 };
+    const items = document.querySelectorAll('.nav-item');
+    if (items[navMap[id]]) items[navMap[id]].classList.add('active');
+  }
+
+  // --- DASHBOARD TASK LOGIC ---
+  let tasks = [
+    { id: 1, title: 'Accept Offer & Pay Deposit', urgent: true, done: true },
+    { id: 2, title: 'Upload Passport for I-20', urgent: true, done: false },
+    { id: 3, title: 'Join the International Slack Group', urgent: false, done: false },
+    { id: 4, title: 'Schedule Visa Interview (DS-160)', urgent: false, done: false }
+  ];
+
+  function renderTasks() {
+    const list = document.getElementById('dashboard-tasks');
+    list.innerHTML = '';
+    
+    let completedCount = 0;
+
+    tasks.forEach(task => {
+      if(task.done) completedCount++;
+      
+      const item = document.createElement('div');
+      item.className = `task-item ${task.done ? 'done' : ''}`;
+      item.onclick = () => toggleTask(task.id);
+      
+      const checkbox = document.createElement('div');
+      checkbox.className = 'task-checkbox';
+      checkbox.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+      
+      const title = document.createElement('div');
+      title.className = 'task-title';
+      title.textContent = task.title;
+
+      item.appendChild(checkbox);
+      item.appendChild(title);
+
+      if (task.urgent && !task.done) {
+        const urgentBadge = document.createElement('span');
+        urgentBadge.className = 'task-urgent';
+        urgentBadge.textContent = 'Urgent';
+        item.appendChild(urgentBadge);
+      }
+
+      list.appendChild(item);
+    });
+
+    // Update Progress logic
+    const percentage = Math.round((completedCount / tasks.length) * 100);
+    document.getElementById('dash-percentage-num').textContent = `${percentage}%`;
+    document.getElementById('dash-progress-text').textContent = `${percentage}% on track`;
+    document.getElementById('topbar-status').textContent = `${percentage}% on track this week`;
+    
+    // Animate SVG Circle
+    const circle = document.getElementById('dash-progress-circle');
+    circle.setAttribute('stroke-dasharray', `${percentage}, 100`);
+    if(percentage === 100) {
+      circle.style.stroke = "var(--teal)";
+    } else {
+      circle.style.stroke = "var(--teal-mid)";
+    }
+  }
+
+  function toggleTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if(task) {
+      task.done = !task.done;
+      renderTasks();
+    }
+  }
+
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', () => {
+    // Note: RenderTasks is now called after onboarding form submit to simulate dynamic loading
+  });
+  // ----------------------------
+
+  // Pulse Rating Logic
+  function selectRating(val) {
+    document.querySelectorAll('.scale-btn').forEach((b, i) => {
+      b.classList.toggle('selected', i + 1 === val);
+    });
+    document.querySelectorAll('.pulse-response').forEach(r => r.classList.remove('show'));
+    if (val <= 2) document.getElementById('pulse-concern').classList.add('show');
+    else if (val === 3) document.getElementById('pulse-warning').classList.add('show');
+    else document.getElementById('pulse-positive').classList.add('show');
+  }
+
+  // Chat/Escalation Logic
+  const chatReplies = [
+    "That's a great question. Let me look through the knowledge base — can you give me a bit more detail so I can give you the most accurate answer?",
+    "Based on official guidance, I'd recommend checking with the ISSS office directly for this one, as timelines can vary. Your mentor Ji-Young has been through this too — want me to flag her?",
+    "I found this in the knowledge base: most students in your situation complete this step in week 3 or 4. Is there a specific deadline you're worried about?",
+    "Hmm, this one's a bit outside what I can answer confidently. I don't want to give you wrong information on something this important. I'd suggest using Tier 2 — your mentor Ji-Young has navigated this."
+  ];
+
+  let replyIndex = 0;
+
+  function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    const msgs = document.getElementById('chat-messages');
+    
+    const userMsg = document.createElement('div');
+    userMsg.className = 'msg user';
+    userMsg.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-meta">You · Just now</div>`;
+    msgs.appendChild(userMsg);
+    
+    input.value = '';
+    input.style.height = 'auto';
+    msgs.scrollTop = msgs.scrollHeight;
+    
+    setTimeout(() => {
+      const botMsg = document.createElement('div');
+      botMsg.className = 'msg bot';
+      botMsg.innerHTML = `<div class="msg-bubble">${chatReplies[replyIndex % chatReplies.length]}</div><div class="msg-meta">Compass · Just now</div>`;
+      msgs.appendChild(botMsg);
+      msgs.scrollTop = msgs.scrollHeight;
+      replyIndex++;
+    }, 900);
+  }
+
+  function handleChatKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  function triggerEscalation() {
+    document.getElementById('escalation-notice').classList.add('show');
+    setTimeout(() => {
+      document.getElementById('escalation-notice').classList.remove('show');
+    }, 5000);
+  }
+
+  // Post Mortem Flow Logic
+  let pmCurrent = 0;
+
+  function pmNext(step) {
+    document.getElementById('pm-step-' + step).style.display = 'none';
+    document.getElementById('step-dot-' + step).classList.remove('active');
+    document.getElementById('step-dot-' + step).classList.add('done');
+    pmCurrent = step + 1;
+    if (pmCurrent <= 3) {
+      document.getElementById('pm-step-' + pmCurrent).style.display = 'block';
+      document.getElementById('step-dot-' + pmCurrent).classList.add('active');
+    }
+  }
+
+  function pmBack(step) {
+    document.getElementById('pm-step-' + step).style.display = 'none';
+    document.getElementById('step-dot-' + step).classList.remove('active');
+    pmCurrent = step - 1;
+    document.getElementById('pm-step-' + pmCurrent).style.display = 'block';
+    document.getElementById('step-dot-' + pmCurrent).classList.remove('done');
+    document.getElementById('step-dot-' + pmCurrent).classList.add('active');
+  }
+
+  function pmSubmit() {
+    document.getElementById('pm-step-3').style.display = 'none';
+    document.getElementById('step-dot-3').classList.remove('active');
+    document.getElementById('step-dot-3').classList.add('done');
+    document.getElementById('pm-success').classList.add('show');
+  }
+
+  function selectRatingChip(el, groupId) {
+    document.querySelectorAll('#' + groupId + ' .rating-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Modal Logic
+  function openModal() {
+    document.getElementById('modal-overlay').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+</script>
+</body>
+</html>
